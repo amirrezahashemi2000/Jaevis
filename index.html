@@ -1,285 +1,143 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>JARVIS CORE</title>
-  <style>
-    :root {
-      --bg: #030712;
-      --card-bg: #0b1528;
-      --accent: #00e5ff;
-      --accent-glow: rgba(0, 229, 255, 0.35);
-      --text: #e2e8f0;
-      --text-dim: #64748b;
-      --border: #1e293b;
-      --success: #10b981;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-    }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      padding: 12px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    header {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
-    .brand-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--accent);
-    }
-    .brand-subtitle {
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      display: block;
-    }
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      background-color: var(--accent);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent);
-      animation: pulse 1.8s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-    .manager-bar {
-      display: flex;
-      gap: 8px;
-    }
-    select, input, button {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      outline: none;
-    }
-    select { flex: 1.2; }
-    input { flex: 1; text-align: left; direction: ltr; }
-    .btn-save {
-      background: #0284c7;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-    .editor-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .editor-label {
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    textarea {
-      width: 100%;
-      height: 95px;
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 6px;
-      color: #38bdf8;
-      font-family: monospace;
-      font-size: 0.8rem;
-      padding: 8px;
-      resize: vertical;
-      direction: ltr;
-      white-space: pre;
-      outline: none;
-    }
-    textarea:focus {
-      border-color: var(--accent);
-    }
-    .btn-execute {
-      background: var(--accent);
-      color: #030712;
-      font-weight: 800;
-      font-size: 0.95rem;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 0 15px var(--accent-glow);
-      cursor: pointer;
-      margin-top: 4px;
-    }
-    .btn-execute:active {
-      transform: scale(0.98);
-    }
-    .terminal-log {
-      background: #000;
-      border: 1px solid #1e293b;
-      border-radius: 6px;
-      padding: 8px 10px;
-      font-family: monospace;
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      direction: ltr;
-      min-height: 24px;
-    }
-    .terminal-log.success { color: var(--success); }
-    .terminal-log.error { color: #f43f5e; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS CORE - v2</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; }
+        body { background: #0a0e17; color: #00f3ff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; }
+        header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; }
+        h1 { font-size: 14px; letter-spacing: 1px; color: #fff; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+        button, select, input { background: #111b2b; color: #00f3ff; border: 1px solid #00f3ff; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer; text-align: center; }
+        button:active { background: #00f3ff; color: #000; }
+        .editor-box { display: flex; flex-direction: column; margin-bottom: 6px; }
+        .editor-label { font-size: 11px; color: #8ab4f8; margin-bottom: 3px; display: flex; justify-content: space-between; }
+        textarea { width: 100%; height: 90px; background: #05070a; color: #e0e0e0; border: 1px solid #1e3a5f; border-radius: 6px; padding: 8px; font-size: 12px; resize: none; }
+        textarea:focus { border-color: #00f3ff; outline: none; }
+        .btn-run { background: linear-gradient(45deg, #0077ff, #00f3ff); color: #000; font-weight: bold; width: 100%; padding: 10px; border: none; border-radius: 6px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
+        .terminal { background: #000; border: 1px solid #1e3a5f; border-radius: 6px; padding: 8px; height: 90px; overflow-y: auto; font-size: 11px; color: #00ff66; }
+        .terminal p { margin-bottom: 3px; }
+        .terminal .error { color: #ff3333; }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div>
-      <span class="brand-title">JARVIS CORE</span>
-      <span class="brand-subtitle">WEB RUNNER & PROTOCOL BUILDER</span>
+    <header>
+        <h1>JARVIS CORE</h1>
+        <span style="font-size: 10px; color: #00ff66;">● ONLINE</span>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="projName" value="Project_1">
+        <button onclick="saveProject()">ذخیره</button>
+        <button onclick="exportProject()">خروجی HTML</button>
     </div>
-    <div class="pulse-dot"></div>
-  </header>
 
-  <div class="manager-bar">
-    <select id="projectSelect">
-      <option value="">-- پروژه‌ها --</option>
-    </select>
-    <input type="text" id="projectName" placeholder="نام پروژه" value="Project_1">
-    <button class="btn-save" id="btnSave">💾 ذخیره</button>
-  </div>
+    <div class="editor-box">
+        <div class="editor-label"><span>HTML</span></div>
+        <textarea id="htmlCode" placeholder="<!-- ساختار HTML -->"></textarea>
+    </div>
 
-  <div class="editor-card">
-    <div class="editor-label">HTML</div>
-    <textarea id="htmlCode" placeholder="<!-- ساختار HTML -->"></textarea>
-  </div>
+    <div class="editor-box">
+        <div class="editor-label"><span>CSS</span></div>
+        <textarea id="cssCode" placeholder="/* استایل‌های CSS */"></textarea>
+    </div>
 
-  <div class="editor-card">
-    <div class="editor-label">CSS</div>
-    <textarea id="cssCode" placeholder="/* استایل‌های CSS */"></textarea>
-  </div>
+    <div class="editor-box">
+        <div class="editor-label"><span>JAVASCRIPT</span></div>
+        <textarea id="jsCode" placeholder="// کدهای جاوااسکریپت"></textarea>
+    </div>
 
-  <div class="editor-card">
-    <div class="editor-label">JavaScript</div>
-    <textarea id="jsCode" placeholder="// کدهای اسکریپت JS"></textarea>
-  </div>
+    <button class="btn-run" onclick="executeProtocol()">اجرای پروتکل (Execute)</button>
 
-  <button class="btn-execute" id="btnRun">اجرای پروتکل (Execute)</button>
+    <div class="terminal" id="terminal">
+        <p>[سیستم آماده است. گزارش‌ها اینجا ظاهر می‌شوند...]</p>
+    </div>
 
-  <div class="terminal-log" id="terminalLog">[آماده دریافت و اجرای دستورات...]</div>
-
-  <script>
-    const htmlIn = document.getElementById('htmlCode');
-    const cssIn = document.getElementById('cssCode');
-    const jsIn = document.getElementById('jsCode');
-    const nameIn = document.getElementById('projectName');
-    const selectProj = document.getElementById('projectSelect');
-    const logBox = document.getElementById('terminalLog');
-
-    function log(msg, type = '') {
-      logBox.className = 'terminal-log ' + type;
-      logBox.innerText = `[${new Date().toLocaleTimeString('fa-IR')}] ${msg}`;
-    }
-
-    // لود لیست پروژه‌ها از حافظه مرورگر
-    function refreshProjectsList() {
-      selectProj.innerHTML = '<option value="">-- پروژه‌ها --</option>';
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.startsWith('jarvis_')) {
-          const opt = document.createElement('option');
-          const pName = key.replace('jarvis_', '');
-          opt.value = pName;
-          opt.innerText = pName;
-          selectProj.appendChild(opt);
+    <script>
+        function logToTerminal(text, isError = false) {
+            const term = document.getElementById('terminal');
+            const p = document.createElement('p');
+            if(isError) p.className = 'error';
+            p.textContent = `> ${text}`;
+            term.appendChild(p);
+            term.scrollTop = term.scrollHeight;
         }
-      }
-    }
 
-    // دکمه ذخیره
-    document.getElementById('btnSave').addEventListener('click', () => {
-      const pName = nameIn.value.trim();
-      if (!pName) {
-        log('خطا: نام پروژه را وارد کنید', 'error');
-        return;
-      }
-      const data = {
-        html: htmlIn.value,
-        css: cssIn.value,
-        js: jsIn.value
-      };
-      localStorage.setItem('jarvis_' + pName, JSON.stringify(data));
-      refreshProjectsList();
-      selectProj.value = pName;
-      log(`پروژه ${pName} ذخیره شد.`, 'success');
-    });
+        // Catch console errors and logs inside execution
+        window.onerror = function(msg, url, line) {
+            logToTerminal(`خطا: ${msg} (خط ${line})`, true);
+        };
 
-    // جابجایی بین پروژه‌ها
-    selectProj.addEventListener('change', () => {
-      const selected = selectProj.value;
-      if (!selected) return;
-      const raw = localStorage.getItem('jarvis_' + selected);
-      if (raw) {
-        const data = JSON.parse(raw);
-        htmlIn.value = data.html || '';
-        cssIn.value = data.css || '';
-        jsIn.value = data.js || '';
-        nameIn.value = selected;
-        log(`پروژه ${selected} بارگذاری شد.`, 'success');
-      }
-    });
+        function executeProtocol() {
+            const html = document.getElementById('htmlCode').value;
+            const css = document.getElementById('cssCode').value;
+            const js = document.getElementById('jsCode').value;
 
-    // دکمه اجرای پروتکل
-    document.getElementById('btnRun').addEventListener('click', () => {
-      try {
-        const combined = `<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>${cssIn.value}</style>
-</head>
-<body>
-  ${htmlIn.value}
-  <script>
-    try {
-      ${jsIn.value}
-    } catch(err) {
-      alert("خطای جاوااسکریپت: " + err.message);
-    }
-  <\/script>
-</body>
-</html>`;
+            logToTerminal("در حال اجرای پروتکل...");
 
-        const blob = new Blob([combined], { type: 'text/html;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        log('پروتکل با موفقیت کامپایل و اجرا شد.', 'success');
-      } catch (err) {
-        log('خطا در اجرا: ' + err.message, 'error');
-      }
-    });
+            const win = window.open('', '_blank');
+            if (!win) {
+                logToTerminal("خطا: مرورگر مانع از باز شدن پنجره شد.", true);
+                return;
+            }
 
-    // لود اولیه
-    refreshProjectsList();
-  </script>
+            win.document.write(`
+                <!DOCTYPE html>
+                <html lang="fa" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <style>${css}</style>
+                </head>
+                <body>
+                    ${html}
+                    <script>
+                        // بازنویسی console.log برای ارسال به ترمینال جارویس
+                        const originalLog = console.log;
+                        console.log = function(...args) {
+                            originalLog.apply(console, args);
+                        };
+                        try {
+                            ${js}
+                        } catch(err) {
+                            console.error(err);
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            win.document.close();
+            logToTerminal("پروتکل با موفقیت اجرا شد.");
+        }
+
+        function saveProject() {
+            const name = document.getElementById('projName').value;
+            const data = {
+                html: document.getElementById('htmlCode').value,
+                css: document.getElementById('cssCode').value,
+                js: document.getElementById('jsCode').value
+            };
+            localStorage.setItem('jarvis_' + name, JSON.stringify(data));
+            logToTerminal(`پروژه "${name}" با موفقیت ذخیره شد.`);
+        }
+
+        function exportProject() {
+            const html = document.getElementById('htmlCode').value;
+            const css = document.getElementById('cssCode').value;
+            const js = document.getElementById('jsCode').value;
+
+            const fullCode = `<!DOCTYPE html>\n<html lang="fa" dir="rtl">\n<head>\n<meta charset="UTF-8">\n<style>\n${css}\n</style>\n</head>\n<body>\n${html}\n<script>\n${js}\n<\/script>\n</body>\n</html>`;
+
+            const blob = new Blob([fullCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (document.getElementById('projName').value || 'project') + '.html';
+            a.click();
+            logToTerminal("فایل خروجی HTML ساخته و دانلود شد.");
+        }
+    </script>
 </body>
 </html>
