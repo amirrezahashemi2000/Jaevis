@@ -16,7 +16,6 @@ jobs:
         with:
           distribution: zulu
           java-version: 17
-      - uses: android-actions/setup-android@v3
       - name: Prepare web project
         run: |
           mkdir -p build_temp/www
