@@ -464,7 +464,7 @@ jobs:
             done
             echo ""
             echo '
-```'
+            ```'
 cat SHA256SUMS.txt
 echo '
 ```'
