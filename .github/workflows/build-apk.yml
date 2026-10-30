@@ -200,7 +200,7 @@ jobs:
 
             if (!native) return;
 
-            // دکمه بک: اگر window.onNativeBack مقدار true برگرداند یعنی خودت هندل کردی
+            # دکمه بک: اگر window.onNativeBack مقدار true برگرداند یعنی خودت هندل کردی
             if (P.App) {
               P.App.addListener('backButton', function (e) {
                 if (typeof window.onNativeBack === 'function' && window.onNativeBack(e) === true) return;
@@ -419,7 +419,7 @@ jobs:
             echo "$KEYSTORE_B64" | base64 -d > "$KS"
             STOREPASS="$KEYSTORE_PASSWORD"
             ALIAS="$KEY_ALIAS_SECRET"
-            KEYPASS="${KEY_PASSWORD_SECRET:-$KEYSTORE_PASSWORD}"
+            KEYPASS="${KEY_PASSWORD_SECRET:-$STOREPASS}"
             echo "SIGNING=کلید اختصاصی شما" >> "$GITHUB_ENV"
           else
             echo "::warning::Secrets برای امضا تنظیم نشده؛ یک کلید موقت ساخته شد (آپدیت روی نسخه قبلی ممکن نیست)."
@@ -461,6 +461,7 @@ jobs:
             echo "|---|---|"
             for f in *.apk *.aab; do
               [ -f "$f" ] && echo "| $f | $(du -h "$f" | cut -f1) |"
+            done
             echo ""
             echo '
 ```'
