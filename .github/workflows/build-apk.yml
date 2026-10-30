@@ -1,4 +1,162 @@
-name: Build Android APK
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Jarvis Core</title>
+<style>
+:root{--bg:#070b14;--c:#0c1322;--l:#1c2b4a;--a:#00e5ff;--b:#0a84ff;--ok:#00ff88;--er:#ff4d6d;--wr:#ffc857;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:#cfe8f5;font:14px Tahoma,system-ui,sans-serif;display:flex;flex-direction:column;gap:8px;padding:8px;overflow:hidden}
+button,select,input{font:inherit;color:inherit}
+.hd{display:flex;justify-content:space-between;align-items:center;border:1px solid #14505a;border-radius:12px;padding:8px 12px;background:#0a1a24}
+.hd b{font:700 16px ui-monospace,Menlo,monospace;letter-spacing:2px;color:#fff}
+.st{font:12px ui-monospace,monospace;color:var(--ok);display:flex;gap:6px;align-items:center}
+.st i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.row{display:flex;gap:6px}
+.btn,select{background:var(--c);border:1.5px solid var(--a);color:var(--a);border-radius:10px;padding:9px 10px;min-height:40px}
+.btn:active{background:#12304a}
+select{flex:1;min-width:0}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:1;white-space:nowrap;background:none;border:0;border-bottom:2px solid var(--l);color:#7f93b5;padding:9px 6px}
+.tabs button.on{color:var(--a);border-color:var(--a)}
+.main{flex:1;min-height:0;position:relative;display:flex;flex-direction:column}
+.pane{display:none;flex:1;min-height:0;flex-direction:column;gap:6px}
+.pane.on{display:flex}
+textarea.ed{flex:1;width:100%;resize:none;background:#05080f;border:1px solid var(--l);border-radius:12px;color:#d7f6ff;padding:10px;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace;direction:ltr;text-align:left;white-space:pre;overflow:auto;tab-size:2;outline:none}
+textarea.ed:focus{border-color:var(--a)}
+.sym{display:flex;gap:4px;overflow-x:auto;direction:ltr;scrollbar-width:none}
+.sym button{background:var(--c);border:1px solid var(--l);border-radius:8px;min-width:38px;padding:8px 6px;font-family:ui-monospace,monospace;color:var(--a)}
+.pv{flex:1;min-height:0;overflow:auto;border:1px solid var(--l);border-radius:12px;background:#fff;text-align:center}
+.pv iframe{border:0;height:100%;width:100%;background:#fff;display:inline-block}
+.pane.fs{position:fixed;inset:0;z-index:20;background:var(--bg);padding:calc(8px + env(safe-area-inset-top,0px)) 8px calc(8px + env(safe-area-inset-bottom,0px))}
+#lg{flex:1;min-height:0;overflow:auto;background:#000;border:1px solid var(--l);border-radius:12px;padding:8px;font:12px/1.6 ui-monospace,Menlo,monospace;direction:ltr;text-align:left}
+#lg div{border-bottom:1px solid #111;padding:2px 0;white-space:pre-wrap;word-break:break-word}
+.log{color:var(--ok)}.info{color:var(--a)}.warn{color:var(--wr)}.error{color:var(--er)}.sys{color:#7f93b5}
+.cin{display:flex;gap:6px;direction:ltr}
+.cin input{flex:1;background:#05080f;border:1px solid var(--l);border-radius:10px;padding:9px;min-width:0;outline:none}
+#run{border:0;border-radius:12px;min-height:46px;font-weight:700;color:#00131a;background:linear-gradient(90deg,var(--b),var(--a));font-size:15px}
+#md{position:fixed;inset:0;background:#000a;z-index:30;display:none;align-items:flex-end}
+#md.on{display:flex}
+.sheet{background:#0b1220;border:1px solid var(--l);border-radius:18px 18px 0 0;width:100%;max-height:80%;overflow:auto;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sheet h3{grid-column:1/-1;margin:0 0 4px;font-size:15px;color:#fff}
+.sheet .btn{text-align:center}
+.sheet .wide{grid-column:1/-1}
+.dz{border-color:var(--er);color:var(--er)}
+#ts{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#12304a;border:1px solid var(--a);padding:8px 16px;border-radius:20px;z-index:40;opacity:0;transition:opacity .2s;pointer-events:none}
+#ts.on{opacity:1}
+.meta{font:11px ui-monospace,monospace;color:#5d7192;display:flex;justify-content:space-between;direction:ltr}
+</style>
+</head>
+<body>
+<div class="hd"><div class="st"><i></i><span id="sv">ONLINE</span></div><b>JARVIS CORE</b></div>
+<div class="row">
+  <select id="ps" aria-label="پروژه"></select>
+  <button class="btn" id="nw">+ جدید</button>
+  <button class="btn" id="mn">⋮ منو</button>
+</div>
+<div class="tabs" id="tb">
+  <button data-t="html" class="on">HTML</button><button data-t="css">CSS</button><button data-t="js">JS</button><button data-t="pv">پیش‌نمایش</button><button data-t="cs">کنسول</button>
+</div>
+<div class="main">
+  <div class="pane on" id="p-html"><textarea class="ed" id="ed-html" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" placeholder="<!-- ساختار HTML -->"></textarea></div>
+  <div class="pane" id="p-css"><textarea class="ed" id="ed-css" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" placeholder="/* استایل‌های CSS */"></textarea></div>
+  <div class="pane" id="p-js"><textarea class="ed" id="ed-js" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" placeholder="// کدهای جاوااسکریپت"></textarea></div>
+  <div class="pane" id="p-pv">
+    <div class="row">
+      <button class="btn" data-w="360">موبایل</button><button class="btn" data-w="768">تبلت</button><button class="btn" data-w="100%">کامل</button><button class="btn" id="fs">تمام‌صفحه</button>
+    </div>
+    <div class="pv"><iframe id="fr" sandbox="allow-scripts allow-modals allow-forms allow-popups" title="preview"></iframe></div>
+  </div>
+  <div class="pane" id="p-cs">
+    <div id="lg"></div>
+    <div class="cin"><input id="ci" placeholder="اجرای کد جاوااسکریپت در پیش‌نمایش" autocapitalize="off" autocomplete="off" spellcheck="false"><button class="btn" id="ce">اجرا</button><button class="btn" id="cc">پاک</button></div>
+  </div>
+</div>
+<div class="sym" id="sy"></div>
+<div class="meta"><span id="mi"></span><span id="sa"></span></div>
+<button id="run">اجرای پروتکل (Execute)</button>
+<div id="md"><div class="sheet" id="sh"></div></div>
+<div id="ts"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const KEY='jarvis_core_v2';
+const T={
+blank:{n:'خالی',html:'',css:'',js:''},
+hello:{n:'سلام جارویس',html:'<h1>سلام جارویس</h1>\n<button id="b">کلیک کن</button>\n<p id="o"></p>',css:'body{font-family:sans-serif;background:#0a0f1c;color:#0ff;text-align:center;padding:40px}\nbutton{padding:12px 24px;border:2px solid #0ff;background:none;color:#0ff;border-radius:10px;font-size:18px}',js:'let n=0;\nb.onclick=()=>{n++;o.textContent="تعداد کلیک: "+n;console.log("کلیک",n)}'},
+fx:{n:'ذرات نورانی',html:'<canvas id="c"></canvas>',css:'body{margin:0;background:#000;overflow:hidden}\ncanvas{display:block;touch-action:none}',js:'const c=document.getElementById("c"),x=c.getContext("2d");\nc.width=innerWidth;c.height=innerHeight;\nconst P=[];\nfunction add(a,b){for(let i=0;i<8;i++)P.push({x:a,y:b,vx:Math.random()*4-2,vy:Math.random()*4-2,l:60})}\nc.addEventListener("pointermove",e=>add(e.clientX,e.clientY));\n(function f(){x.fillStyle="rgba(0,0,0,.15)";x.fillRect(0,0,c.width,c.height);\nP.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;p.l--;x.fillStyle="hsl("+(p.l*6)+",100%,60%)";x.fillRect(p.x,p.y,3,3);if(p.l<=0)P.splice(i,1)});\nrequestAnimationFrame(f)})();'}
+};
+let S,cur='html',timer;
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ if(!S||!S.p||!S.id||!S.p[S.id]){const id='p'+Date.now();S={id,p:{[id]:{name:'Project_1',...T.hello}},fs:13,auto:true}}}
+function save(quiet){try{localStorage.setItem(KEY,JSON.stringify(S));if(!quiet)$('#sa').textContent='ذخیره شد '+new Date().toLocaleTimeString('fa-IR')}catch(e){toast('ذخیره‌سازی ناموفق بود')}}
+const P=()=>S.p[S.id];
+function toast(m){const t=$('#ts');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800)}
+function fillSel(){$('#ps').innerHTML=Object.entries(S.p).map(([k,v])=>`<option value="${k}"${k==S.id?' selected':''}>${v.name.replace(/</g,'&lt;')}</option>`).join('')}
+function fillEd(){['html','css','js'].forEach(k=>$('#ed-'+k).value=P()[k]);$$('.ed').forEach(e=>e.style.fontSize=S.fs+'px');meta()}
+function meta(){const e=$('#ed-'+(['html','css','js'].includes(cur)?cur:'html'));$('#mi').textContent=e.value.split('\n').length+' lines · '+e.value.length+' chars'}
+function tab(t){cur=t;$$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));$$('.pane').forEach(p=>p.classList.toggle('on',p.id=='p-'+t));$('#sy').style.display=['html','css','js'].includes(t)?'flex':'none';if(t=='pv'&&!$('#fr').srcdoc)run(true);meta()}
+const HOOK='<script>(function(){const f=a=>[].map.call(a,x=>{try{return typeof x==="object"?JSON.stringify(x):String(x)}catch(e){return String(x)}}).join(" ");const p=(t,a)=>parent.postMessage({j:1,t:t,m:f(a)},"*");["log","info","warn","error"].forEach(k=>{const o=console[k];console[k]=function(){p(k,arguments);o.apply(console,arguments)}});onerror=(m,s,l)=>p("error",[m+" (خط "+l+")"]);addEventListener("unhandledrejection",e=>p("error",[e.reason]));addEventListener("message",e=>{if(e.data&&e.data.ev!==undefined){try{p("log",["⮕ "+(0,eval)(e.data.ev)])}catch(x){p("error",[x])}}})})();<\/script>';
+function build(dbg){const d=P();return '<!DOCTYPE html>\n<html lang="fa">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>'+d.name.replace(/</g,'')+'</title>\n'+(dbg?HOOK+'\n':'')+'<style>\n'+d.css+'\n</style>\n</head>\n<body>\n'+d.html+'\n<script>\n'+d.js+'\n<\/script>\n</body>\n</html>'}
+function log(t,m){const l=$('#lg'),d=document.createElement('div');d.className=t;d.textContent=m;l.appendChild(d);l.scrollTop=l.scrollHeight}
+function run(silent){$('#lg').innerHTML='';log('sys','▶ اجرا شد '+new Date().toLocaleTimeString('fa-IR'));$('#fr').srcdoc=build(true);if(!silent)tab('pv')}
+addEventListener('message',e=>{if(e.data&&e.data.j&&e.source===$('#fr').contentWindow)log(e.data.t,e.data.m)});
+function ins(t){const e=$('#ed-'+cur);if(!e)return;const s=e.selectionStart,n=e.selectionEnd;e.setRangeText(t,s,n,'end');if(t.length==2&&'(){}[]<>""\'\''.includes(t))e.selectionStart=e.selectionEnd=s+1;e.focus();e.dispatchEvent(new Event('input'))}
+['⇥','<>','</>','{}','()','[]','""','=','=>',';','/','!','#','.',':'].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.onclick=()=>ins(s=='⇥'?'  ':s=='</>'?'</>':s);$('#sy').appendChild(b)});
+['html','css','js'].forEach(k=>{const e=$('#ed-'+k);
+ e.addEventListener('input',()=>{P()[k]=e.value;meta();$('#sa').textContent='در حال ذخیره…';clearTimeout(timer);timer=setTimeout(()=>{save();if(S.auto&&$('#fr').srcdoc)run(true)},500)});
+ e.addEventListener('keydown',ev=>{if(ev.key=='Tab'){ev.preventDefault();ins('  ')}})});
+$$('.tabs button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+$('#run').onclick=()=>{save();run()};
+$('#ps').onchange=e=>{S.id=e.target.value;save(1);fillEd();$('#fr').srcdoc='';toast('پروژه باز شد')};
+$$('[data-w]').forEach(b=>b.onclick=()=>{$('#fr').style.width=b.dataset.w;$('#fr').style.maxWidth='100%'});
+$('#fs').onclick=()=>{const p=$('#p-pv');p.classList.toggle('fs');$('#fs').textContent=p.classList.contains('fs')?'خروج':'تمام‌صفحه'};
+$('#cc').onclick=()=>$('#lg').innerHTML='';
+function ev(){const v=$('#ci').value.trim();if(!v)return;log('sys','› '+v);$('#fr').contentWindow&&$('#fr').contentWindow.postMessage({ev:v},'*');$('#ci').value=''}
+$('#ce').onclick=ev;$('#ci').onkeydown=e=>{if(e.key=='Enter')ev()};
+function modal(h){$('#sh').innerHTML=h;$('#md').classList.add('on')}
+function close(){$('#md').classList.remove('on')}
+$('#md').onclick=e=>{if(e.target.id=='md')close()};
+function newP(k){const n=prompt('نام پروژه:','Project_'+(Object.keys(S.p).length+1));if(!n)return;const id='p'+Date.now();S.p[id]={name:n,html:T[k].html,css:T[k].css,js:T[k].js};S.id=id;save(1);fillSel();fillEd();$('#fr').srcdoc='';close();tab('html')}
+$('#nw').onclick=()=>modal('<h3>قالب پروژه جدید</h3>'+Object.entries(T).map(([k,v])=>`<button class="btn" data-n="${k}">${v.n}</button>`).join(''));
+$('#sh').addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.n){newP(b.dataset.n);return}
+ const a=b.dataset.a;if(!a)return;
+ if(a=='ren'){const n=prompt('نام جدید:',P().name);if(n){P().name=n;save();fillSel()}}
+ if(a=='dup'){const id='p'+Date.now();S.p[id]={...P(),name:P().name+'_copy'};S.id=id;save();fillSel();fillEd()}
+ if(a=='del'){if(Object.keys(S.p).length<2)return toast('حداقل یک پروژه لازم است');if(confirm('پروژه حذف شود؟')){delete S.p[S.id];S.id=Object.keys(S.p)[0];save();fillSel();fillEd()}}
+ if(a=='exp')await exp();
+ if(a=='cp'){try{await navigator.clipboard.writeText(build(false));toast('کد کامل کپی شد')}catch(x){toast('کپی ناموفق بود')}}
+ if(a=='imp'){$('#fi').click();return}
+ if(a=='fp'||a=='fm'){S.fs=Math.max(10,Math.min(24,S.fs+(a=='fp'?1:-1)));save(1);fillEd();toast('اندازه قلم: '+S.fs);return}
+ if(a=='au'){S.auto=!S.auto;save(1);toast('اجرای خودکار: '+(S.auto?'روشن':'خاموش'));return}
+ if(a=='fmt'){fmt();}
+ close()});
+$('#mn').onclick=()=>modal(`<h3>${P().name.replace(/</g,'&lt;')}</h3>
+<button class="btn" data-a="exp">خروجی HTML</button><button class="btn" data-a="cp">کپی کد کامل</button>
+<button class="btn" data-a="imp">وارد کردن فایل</button><button class="btn" data-a="fmt">مرتب‌سازی کد</button>
+<button class="btn" data-a="ren">تغییر نام</button><button class="btn" data-a="dup">کپی پروژه</button>
+<button class="btn" data-a="fp">قلم بزرگ‌تر</button><button class="btn" data-a="fm">قلم کوچک‌تر</button>
+<button class="btn wide" data-a="au">اجرای خودکار: ${S.auto?'روشن':'خاموش'} (تغییر)</button>
+<button class="btn dz wide" data-a="del">حذف پروژه</button>`);
+function fmt(){const e=$('#ed-'+cur);if(!e||cur=='html'&&0)return;let v=e.value.replace(/[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').trim()+'\n';if(cur!='html'){let d=0;v=v.split('\n').map(l=>{const t=l.trim();if(/^[}\]\)]/.test(t))d=Math.max(0,d-1);const r='  '.repeat(d)+t;const o=(t.match(/[{\[\(]/g)||[]).length,c=(t.match(/[}\]\)]/g)||[]).length;d=Math.max(0,d+o-c+(/^[}\]\)]/.test(t)?1:0));return t?r:''}).join('\n')}e.value=v;P()[cur]=v;save();meta();toast('مرتب شد')}
+async function exp(){const html=build(false),name=(P().name||'project').replace(/[^\w\-]+/g,'_')+'.html';
+ try{const f=new File([html],name,{type:'text/html'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(x){if(x.name=='AbortError')return}
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=name;document.body.appendChild(a);a.click();a.remove();toast('فایل ذخیره شد')}catch(x){try{await navigator.clipboard.writeText(html);toast('کد کپی شد')}catch(y){toast('خروجی ناموفق بود')}}}
+const fi=document.createElement('input');fi.type='file';fi.id='fi';fi.accept='.html,.htm,.txt';fi.hidden=true;document.body.appendChild(fi);
+fi.onchange=async()=>{const f=fi.files[0];if(!f)return;const t=await f.text(),d=new DOMParser().parseFromString(t,'text/html');
+ const css=[...d.querySelectorAll('style')].map(s=>s.textContent.trim()).join('\n'),js=[...d.querySelectorAll('script:not([src])')].map(s=>s.textContent.trim()).join('\n');
+ d.querySelectorAll('style,script:not([src])').forEach(n=>n.remove());
+ const id='p'+Date.now();S.p[id]={name:f.name.replace(/\.\w+$/,''),html:d.body.innerHTML.trim(),css,js};S.id=id;save();fillSel();fillEd();close();fi.value='';toast('فایل وارد شد')};
+addEventListener('beforeunload',()=>save(1));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)save(1)});
+load();fillSel();fillEd();tab('html');save(1);
+</script>
+</body>
+</html>
+: Build Android APK
 on:
   workflow_dispatch:
   push:
