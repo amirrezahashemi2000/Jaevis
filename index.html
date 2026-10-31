@@ -42,3 +42,633 @@ button{cursor:pointer}
 .exec:active{filter:brightness(.9)}
 .th{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font:12px ui-monospace,monospace;color:var(--mut)}
 #term{margin-top:6px;background:#000;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;height:26vh;overflow:auto;font:12px/1.6 ui-monospace,monospace;direction:rtl;text-align:right}
+.l{color:var(--green);word-break:break-word;white-space:pre-wrap}
+.l.err{color:var(--red)}.l.warn{color:var(--yellow)}.l.info{color:var(--cyan)}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30px);transform:translate(-50%,20px);background:#0c2233;border:1.5px solid var(--cyan);padding:10px 18px;border-radius:30px;opacity:0;pointer-events:none;transition:.25s;z-index:99;font-size:14px;max-width:90%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.ov{position:fixed;inset:0;background:rgba(2,6,12,.88);z-index:50;display:none;padding:max(env(safe-area-inset-top),16px) 12px 16px;overflow:auto}
+.ov.show{display:block}
+.box{background:var(--panel);border:1.5px solid var(--cyan);border-radius:18px;padding:14px;max-width:560px;margin:0 auto}
+.bh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:700}
+.fld{display:block;margin:10px 0 4px;font-size:12px;color:var(--mut)}
+.inp{width:100%;background:var(--panel2);border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;outline:0;direction:ltr;text-align:left}
+.inp:focus{border-color:var(--cyan)}
+.note{font-size:12px;color:var(--mut);line-height:1.8;margin-top:10px}
+.pi{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px;margin-top:8px}
+.pi .nm{flex:1;min-width:0}
+.pi b{display:block;font:600 14px ui-monospace,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}
+.pi small{color:var(--mut);font-size:11px}
+.empty{text-align:center;color:var(--mut);padding:26px 0;font-size:13px}
+.tp{display:block;width:100%;text-align:right;margin-top:8px;padding:14px}
+#ovPrev{padding:0;background:#fff}
+#ovPrev .pt{display:flex;align-items:center;gap:8px;background:var(--bg);padding:max(env(safe-area-inset-top),10px) 10px 10px;border-bottom:1.5px solid var(--cyan)}
+#ovPrev .pt span{flex:1;font:12px ui-monospace,monospace;color:var(--cyan);text-align:center}
+#ovPrev{display:none;flex-direction:column}
+#ovPrev.show{display:flex}
+#frame{flex:1;width:100%;border:0;background:#fff}
+#ovAi{padding:0;background:transparent;overflow:hidden}
+#ovAi.show{display:flex;flex-direction:column;justify-content:flex-end}
+.sheet{background:var(--bg);border:1.5px solid var(--cyan);border-bottom:0;border-radius:22px 22px 0 0;display:flex;flex-direction:column;height:92%;max-height:100%}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:700}
+.sh .hb button{width:34px;height:34px;font-size:15px}
+#msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:94%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.85;word-break:break-word}
+.msg.user{align-self:flex-start;background:#0c2a44;border:1px solid #14507d}
+.msg.bot{align-self:flex-end;background:var(--panel);border:1px solid var(--line);width:94%}
+.msg code{background:#000;padding:1px 6px;border-radius:6px;font:12px ui-monospace,monospace;direction:ltr;display:inline-block}
+.cb{margin:8px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;direction:ltr}
+.cbh{display:flex;justify-content:space-between;align-items:center;background:#08121d;padding:5px 8px;font:11px ui-monospace,monospace;color:var(--cyan)}
+.cbh button{border:1px solid var(--cyan);background:transparent;color:var(--cyan);border-radius:8px;padding:4px 8px;font-size:11px;margin-left:5px}
+.cb pre{margin:0;padding:10px;background:#000;font:12px/1.5 ui-monospace,monospace;overflow-x:auto;max-height:260px;color:#cfe9ff;white-space:pre}
+.ap{display:block;width:100%;margin-top:6px;padding:9px;border-radius:10px;border:1.5px solid var(--green);background:transparent;color:var(--green);font-weight:700;font-size:13px}
+#chips{display:flex;gap:6px;overflow-x:auto;padding:8px 12px 0}
+#chips button{flex:0 0 auto;border:1px solid var(--line);background:var(--panel2);border-radius:20px;padding:7px 12px;font-size:12px}
+.ir{display:flex;gap:8px;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px);align-items:flex-end}
+#aiIn{flex:1;max-height:120px;min-height:44px;resize:none;background:var(--panel2);border:1.5px solid var(--line);border-radius:14px;padding:11px 12px;outline:0;line-height:1.5}
+#aiIn:focus{border-color:var(--cyan)}
+#aiSend{width:46px;height:46px;border-radius:14px;border:0;background:linear-gradient(135deg,#0a84ff,#00f0ff);color:#00121c;font-size:18px;font-weight:800}
+.chk{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px}
+.chk input{width:20px;height:20px;accent-color:var(--cyan)}
+</style>
+<script>
+window.addEventListener('error',function(e){
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;left:8px;right:8px;top:8px;z-index:9999;background:#300;color:#fff;border:1px solid #f55;border-radius:10px;padding:10px;font:12px monospace;direction:ltr;white-space:pre-wrap';
+  d.textContent='JS ERROR: '+e.message+(e.lineno?' (line '+e.lineno+')':'');
+  (document.body||document.documentElement).appendChild(d);
+});
+</script>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="ttl">JARVIS CORE</div>
+  <div class="st" id="st"><i></i><span id="stTxt">ONLINE</span></div>
+  <div class="hb"><button class="ib" id="bAi" title="هوش مصنوعی">🤖</button><button class="ib" id="bSet" title="تنظیمات">⚙️</button></div>
+</div>
+
+<div class="row">
+  <div class="pn"><input id="projName" value="Project_1" autocomplete="off" spellcheck="false"><i id="dirty"></i></div>
+</div>
+<div class="row r4">
+  <button class="btn" id="bNew">جدید</button>
+  <button class="btn" id="bSave">ذخیره</button>
+  <button class="btn" id="bLoad">بارگذاری</button>
+  <button class="btn" id="bExp">خروجی HTML</button>
+</div>
+
+<div class="tabs">
+  <button class="tab on" data-t="html">HTML</button>
+  <button class="tab" data-t="css">CSS</button>
+  <button class="tab" data-t="js">JS</button>
+  <span id="cnt">0</span>
+</div>
+<div id="sym"></div>
+
+<textarea class="ed on" id="htmlCode" placeholder="<!-- HTML ساختار -->" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+<textarea class="ed" id="cssCode" placeholder="/* CSS استایل‌ها */" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+<textarea class="ed" id="jsCode" placeholder="// JavaScript منطق" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+
+<button class="exec" id="bRun">اجرای پروتکل (Execute)</button>
+<div class="row" style="grid-template-columns:1fr 1fr">
+  <button class="btn" id="bCopy">کپی کد این تب</button>
+  <button class="btn" id="bAi2">🤖 دستیار هوشمند</button>
+</div>
+
+<div class="th"><span>TERMINAL</span><button class="btn sm" id="bClr">پاک کردن</button></div>
+<div id="term"><div class="l">[سیستم آماده است. گزارش‌ها اینجا ظاهر می‌شوند...]</div></div>
+
+<div id="toast"></div>
+<input type="file" id="fileIn" accept=".html,.htm,.json,.txt" hidden>
+
+<!-- پروژه‌ها -->
+<div class="ov" id="ovProj"><div class="box">
+  <div class="bh"><span>📂 پروژه‌های ذخیره‌شده</span><button class="btn sm" data-close="ovProj">بستن</button></div>
+  <input class="inp" id="pSearch" placeholder="جستجو..." style="text-align:right;direction:rtl">
+  <div id="pList"></div>
+  <div class="row" style="grid-template-columns:1fr 1fr">
+    <button class="btn sm" id="bImp">⬆️ وارد کردن فایل</button>
+    <button class="btn sm" id="bBak">⬇️ پشتیبان همه</button>
+  </div>
+</div></div>
+
+<!-- قالب‌ها -->
+<div class="ov" id="ovTpl"><div class="box">
+  <div class="bh"><span>✨ پروژه جدید</span><button class="btn sm" data-close="ovTpl">بستن</button></div>
+  <div id="tList"></div>
+</div></div>
+
+<!-- تنظیمات -->
+<div class="ov" id="ovSet"><div class="box">
+  <div class="bh"><span>⚙️ تنظیمات هوش مصنوعی</span><button class="btn sm" data-close="ovSet">بستن</button></div>
+  <label class="fld">Anthropic API Key</label>
+  <input class="inp" id="setKey" type="password" placeholder="sk-ant-..." autocomplete="off">
+  <label class="fld">مدل</label>
+  <input class="inp" id="setModel" placeholder="claude-sonnet-5-5">
+  <label class="chk"><input type="checkbox" id="setCtx"> ارسال کد پروژه همراه پیام‌ها</label>
+  <button class="btn" id="setSave" style="width:100%;margin-top:14px">ذخیره تنظیمات</button>
+  <div class="note">کلید فقط روی همین گوشی ذخیره می‌شود و مستقیم به سرور Anthropic می‌رود. کلید را از console.anthropic.com بگیر. هزینه مصرف از حساب خودت کم می‌شود و اینترنت لازم است.</div>
+</div></div>
+
+<!-- پیش‌نمایش -->
+<div class="ov" id="ovPrev">
+  <div class="pt">
+    <button class="btn sm" data-close="ovPrev">✕ بستن</button>
+    <span id="pvName">PREVIEW</span>
+    <button class="btn sm" id="pvReload">↻</button>
+  </div>
+  <iframe id="frame" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+</div>
+
+<!-- هوش مصنوعی -->
+<div class="ov" id="ovAi"><div class="sheet">
+  <div class="sh">
+    <span>🤖 جارویس AI</span>
+    <div class="hb">
+      <button class="ib" id="aiUndo" title="بازگردانی" style="display:none">↩</button>
+      <button class="ib" id="aiClear" title="گفتگوی جدید">🗑</button>
+      <button class="ib" id="aiSet" title="تنظیمات">⚙️</button>
+      <button class="ib" data-close="ovAi">✕</button>
+    </div>
+  </div>
+  <div id="msgs"></div>
+  <div id="chips">
+    <button data-q="fix">🛠 رفع خطا</button>
+    <button data-q="explain">📖 توضیح کد</button>
+    <button data-q="ui">✨ بهبود ظاهر</button>
+    <button data-q="opt">⚡ بهینه‌سازی</button>
+    <button data-q="build">🎮 بساز از صفر</button>
+  </div>
+  <div class="ir">
+    <textarea id="aiIn" rows="1" placeholder="بنویس چی می‌خوای..."></textarea>
+    <button id="aiSend">➤</button>
+  </div>
+</div></div>
+
+<script>
+(function () {
+'use strict';
+var $ = function (s) { return document.querySelector(s); };
+var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+var LS = {
+  get: function (k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set: function (k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+};
+var CAP = window.Capacitor || {};
+var isNative = !!(CAP.isNativePlatform && CAP.isNativePlatform());
+var PL = (isNative && CAP.Plugins) || {};
+
+var ED = { html: $('#htmlCode'), css: $('#cssCode'), js: $('#jsCode') };
+var nameEl = $('#projName'), term = $('#term');
+var active = 'html', dirty = false, current = null, lastErrors = [], undoStack = [];
+var PFX = 'jarvis_';
+
+/* ---------- ابزارهای کوچک ---------- */
+function hap() { try { if (window.Native) window.Native.haptic('LIGHT'); } catch (e) {} }
+var tt;
+function toast(t) {
+  var e = $('#toast'); e.textContent = t; e.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(function () { e.classList.remove('show'); }, 2200);
+}
+function log(m, type) {
+  var d = document.createElement('div');
+  d.className = 'l ' + (type || '');
+  d.textContent = '[' + new Date().toLocaleTimeString('en-GB') + '] ' + m;
+  term.appendChild(d);
+  while (term.children.length > 300) term.removeChild(term.firstChild);
+  term.scrollTop = term.scrollHeight;
+}
+function getCode() { return { html: ED.html.value, css: ED.css.value, js: ED.js.value }; }
+function setCode(o) {
+  ED.html.value = o.html || ''; ED.css.value = o.css || ''; ED.js.value = o.js || '';
+  updCnt();
+}
+function setDirty(b) { dirty = b; $('#dirty').classList.toggle('on', b); }
+function updCnt() { $('#cnt').textContent = ED[active].value.length + ' ch'; }
+function safeName() { return (nameEl.value.trim() || 'project').replace(/[\\\/:*?"<>|]+/g, '_'); }
+
+/* ---------- لایه‌ها (overlay) ---------- */
+var ovStack = [];
+function openOv(id) {
+  $('#' + id).classList.add('show');
+  var i = ovStack.indexOf(id); if (i >= 0) ovStack.splice(i, 1);
+  ovStack.push(id);
+}
+function closeOv(id) {
+  $('#' + id).classList.remove('show');
+  var i = ovStack.indexOf(id); if (i >= 0) ovStack.splice(i, 1);
+  if (id === 'ovPrev') $('#frame').srcdoc = '';
+}
+window.onNativeBack = function () {
+  if (ovStack.length) { closeOv(ovStack[ovStack.length - 1]); return true; }
+  return false;
+};
+$$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { closeOv(b.getAttribute('data-close')); }); });
+document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('button')) hap(); });
+
+/* ---------- تب‌ها و نوار نمادها ---------- */
+function setTab(t) {
+  active = t;
+  $$('.tab').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-t') === t); });
+  Object.keys(ED).forEach(function (k) { ED[k].classList.toggle('on', k === t); });
+  updCnt();
+}
+$$('.tab').forEach(function (b) { b.addEventListener('click', function () { setTab(b.getAttribute('data-t')); }); });
+
+var SYMS = ['Tab', '{', '}', '(', ')', '[', ']', '<', '>', '/', '=', '"', "'", ';', ':', '$', '`', '!', '&', '|', '+', '-', '*', '#', '.', ',', '_'];
+SYMS.forEach(function (s) {
+  var b = document.createElement('button');
+  b.textContent = s;
+  b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+  b.addEventListener('click', function () { insertAt(s === 'Tab' ? '  ' : s); });
+  $('#sym').appendChild(b);
+});
+function insertAt(txt) {
+  var el = ED[active], a = el.selectionStart, b = el.selectionEnd;
+  el.setRangeText(txt, a, b, 'end');
+  el.focus(); onEdit();
+}
+Object.keys(ED).forEach(function (k) {
+  ED[k].addEventListener('input', onEdit);
+  ED[k].addEventListener('keydown', function (e) {
+    if (e.key === 'Tab') { e.preventDefault(); insertAt('  '); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveProject(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); run(); }
+  });
+});
+var dt;
+function onEdit() {
+  setDirty(true); updCnt();
+  clearTimeout(dt);
+  dt = setTimeout(function () {
+    var c = getCode(); c.name = nameEl.value; c.cur = current;
+    try { LS.set('jc.draft', c); } catch (e) {}
+  }, 700);
+}
+nameEl.addEventListener('input', function () { setDirty(true); onEdit(); });
+
+/* ---------- ساخت سند و اجرا ---------- */
+function bridgeFn() {
+  function s(t, a) {
+    try {
+      parent.postMessage({ jc: 1, t: t, m: Array.prototype.map.call(a, function (x) {
+        try { return typeof x === 'object' ? JSON.stringify(x) : String(x); } catch (e) { return String(x); }
+      }).join(' ') }, '*');
+    } catch (e) {}
+  }
+  ['log', 'info', 'warn', 'error'].forEach(function (k) {
+    var o = console[k];
+    console[k] = function () { s(k, arguments); o.apply(console, arguments); };
+  });
+  window.addEventListener('error', function (e) { s('error', [e.message + (e.lineno ? ' (سطر ' + e.lineno + ')' : '')]); });
+  window.addEventListener('unhandledrejection', function (e) { s('error', ['Promise: ' + (e.reason && e.reason.message || e.reason)]); });
+  try { window.localStorage.getItem('x'); } catch (e) {
+    var mem = {};
+    var shim = { getItem: function (k) { return k in mem ? mem[k] : null; }, setItem: function (k, v) { mem[k] = String(v); }, removeItem: function (k) { delete mem[k]; }, clear: function () { mem = {}; } };
+    try { Object.defineProperty(window, 'localStorage', { value: shim }); } catch (e2) {}
+  }
+}
+function buildDoc(c, title, withConsole) {
+  var bridge = withConsole ? '<script>(' + bridgeFn.toString() + ')();<\/script>' : '';
+  var style = c.css.trim() ? '<style>\n' + c.css + '\n</style>' : '';
+  var script = c.js.trim() ? '<script>\n' + c.js + '\n<\/script>' : '';
+  if (/<html[\s>]/i.test(c.html)) {
+    var d = c.html;
+    if (/<\/head>/i.test(d)) d = d.replace(/<\/head>/i, bridge + style + '</head>'); else d = bridge + style + d;
+    if (/<\/body>/i.test(d)) d = d.replace(/<\/body>/i, script + '<\/body>'); else d += script;
+    return d;
+  }
+  return '<!DOCTYPE html>\n<html lang="fa">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>' + esc(title) + '</title>\n' + bridge + style + '\n</head>\n<body>\n' + c.html + '\n' + script + '\n<\/body>\n</html>';
+}
+function run() {
+  lastErrors = [];
+  $('#pvName').textContent = safeName();
+  $('#frame').srcdoc = buildDoc(getCode(), safeName(), true);
+  openOv('ovPrev');
+  log('پروتکل با موفقیت اجرا شد.', 'info');
+  onEdit();
+}
+window.addEventListener('message', function (e) {
+  if (e.source !== $('#frame').contentWindow || !e.data || !e.data.jc) return;
+  var t = e.data.t;
+  log((t === 'log' ? '' : t.toUpperCase() + ': ') + e.data.m, t === 'error' ? 'err' : t === 'warn' ? 'warn' : '');
+  if (t === 'error') lastErrors.push(e.data.m);
+});
+$('#bRun').addEventListener('click', run);
+$('#pvReload').addEventListener('click', run);
+
+/* ---------- ذخیره / بارگذاری ---------- */
+function listProjects() {
+  var out = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k.indexOf(PFX) !== 0) continue;
+    try {
+      var d = JSON.parse(localStorage.getItem(k));
+      if (d && typeof d === 'object' && ('html' in d || 'css' in d || 'js' in d)) {
+        out.push({ name: k.slice(PFX.length), html: d.html || '', css: d.css || '', js: d.js || '', ts: d.ts || 0 });
+      }
+    } catch (e) {}
+  }
+  return out.sort(function (a, b) { return b.ts - a.ts; });
+}
+function saveProject() {
+  var n = nameEl.value.trim() || 'project';
+  nameEl.value = n;
+  if (localStorage.getItem(PFX + n) !== null && n !== current && !confirm('پروژه «' + n + '» وجود دارد. جایگزین شود؟')) return;
+  var c = getCode(); c.ts = Date.now();
+  try { localStorage.setItem(PFX + n, JSON.stringify(c)); } catch (e) { log('ذخیره نشد: ' + e.message, 'err'); return; }
+  current = n; setDirty(false); onEdit();
+  log('پروژه "' + n + '" با موفقیت ذخیره شد.'); toast('ذخیره شد ✓');
+}
+function loadProject(p) {
+  if (dirty && !confirm('تغییرات ذخیره‌نشده از بین می‌رود. ادامه؟')) return;
+  setCode(p); nameEl.value = p.name; current = p.name; setDirty(false); onEdit();
+  closeOv('ovProj'); log('پروژه "' + p.name + '" بارگذاری شد.', 'info'); toast('بارگذاری شد ✓');
+}
+function fmtSize(p) { var n = (p.html + p.css + p.js).length; return n > 1024 ? (n / 1024).toFixed(1) + ' KB' : n + ' B'; }
+function renderProjects() {
+  var q = $('#pSearch').value.trim().toLowerCase();
+  var list = listProjects().filter(function (p) { return !q || p.name.toLowerCase().indexOf(q) >= 0; });
+  var box = $('#pList'); box.innerHTML = '';
+  if (!list.length) { box.innerHTML = '<div class="empty">پروژه‌ای پیدا نشد</div>'; return; }
+  list.forEach(function (p) {
+    var el = document.createElement('div'); el.className = 'pi';
+    el.innerHTML = '<div class="nm"><b>' + esc(p.name) + '</b><small>' + (p.ts ? new Date(p.ts).toLocaleString('fa-IR') : 'قدیمی') + ' · ' + fmtSize(p) + '</small></div>' +
+      '<button class="btn sm" data-a="load">باز کن</button><button class="btn sm" data-a="dup">کپی</button><button class="btn sm red" data-a="del">🗑</button>';
+    el.querySelector('[data-a=load]').onclick = function () { loadProject(p); };
+    el.querySelector('[data-a=dup]').onclick = function () {
+      var nn = p.name + '_copy';
+      localStorage.setItem(PFX + nn, JSON.stringify({ html: p.html, css: p.css, js: p.js, ts: Date.now() }));
+      renderProjects(); toast('کپی شد');
+    };
+    el.querySelector('[data-a=del]').onclick = function () {
+      if (!confirm('حذف «' + p.name + '»؟')) return;
+      localStorage.removeItem(PFX + p.name);
+      if (current === p.name) current = null;
+      renderProjects();
+    };
+    box.appendChild(el);
+  });
+}
+$('#bSave').addEventListener('click', saveProject);
+$('#bLoad').addEventListener('click', function () { $('#pSearch').value = ''; renderProjects(); openOv('ovProj'); });
+$('#pSearch').addEventListener('input', renderProjects);
+
+/* ---------- قالب‌ها / پروژه جدید ---------- */
+var TPL = [
+  { n: '📄 خالی', c: { html: '', css: '', js: '' } },
+  { n: '👋 سلام دنیا', c: {
+    html: '<h1>سلام جارویس 👋</h1>\n<button id="b">کلیک کن</button>',
+    css: 'body{font-family:sans-serif;text-align:center;padding:40px;background:#0b1422;color:#fff}\nbutton{padding:12px 24px;border:0;border-radius:12px;background:#00e5ff;font-size:18px}',
+    js: "document.getElementById('b').onclick=function(){console.log('کلیک شد!');alert('سلام!')}" } },
+  { n: '🔢 شمارنده', c: {
+    html: '<div id="n">0</div>\n<div class="r"><button id="m">−</button><button id="p">+</button></div>',
+    css: 'body{margin:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#050a12;color:#00e5ff;font-family:monospace}\n#n{font-size:96px}\nbutton{width:80px;height:80px;font-size:36px;border-radius:50%;border:2px solid #00e5ff;background:transparent;color:#00e5ff;margin:0 8px}',
+    js: "var n=0,e=document.getElementById('n');\ndocument.getElementById('p').onclick=function(){e.textContent=++n};\ndocument.getElementById('m').onclick=function(){e.textContent=--n};" } },
+  { n: '🌌 بوم متحرک (Canvas)', c: {
+    html: '<canvas id="c"></canvas>',
+    css: 'html,body{margin:0;background:#000;overflow:hidden}\ncanvas{display:block}',
+    js: "var c=document.getElementById('c'),x=c.getContext('2d');\nfunction rs(){c.width=innerWidth;c.height=innerHeight}rs();onresize=rs;\nvar P=Array.from({length:60},function(){return{x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2}});\n(function loop(){x.fillStyle='rgba(0,0,0,.2)';x.fillRect(0,0,c.width,c.height);\nP.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;x.fillStyle='#00e5ff';x.beginPath();x.arc(p.x,p.y,3,0,7);x.fill()});\nrequestAnimationFrame(loop)})();" } }
+];
+$('#bNew').addEventListener('click', function () {
+  var box = $('#tList'); box.innerHTML = '';
+  TPL.forEach(function (t) {
+    var b = document.createElement('button'); b.className = 'btn tp'; b.textContent = t.n;
+    b.onclick = function () {
+      if (dirty && !confirm('تغییرات ذخیره‌نشده از بین می‌رود. ادامه؟')) return;
+      setCode(t.c); current = null; nameEl.value = 'Project_' + (listProjects().length + 1);
+      setDirty(false); onEdit(); closeOv('ovTpl'); setTab('html'); log('پروژه جدید ساخته شد.', 'info');
+    };
+    box.appendChild(b);
+  });
+  openOv('ovTpl');
+});
+
+/* ---------- خروجی / ورودی فایل ---------- */
+function exportFile(name, text, mime) {
+  if (isNative && PL.Filesystem && PL.Share) {
+    return PL.Filesystem.writeFile({ path: name, data: text, directory: 'CACHE', encoding: 'utf8' })
+      .then(function (r) { return PL.Share.share({ title: name, url: r.uri, dialogTitle: 'ذخیره / اشتراک ' + name }); })
+      .catch(function (e) { if (!/cancel/i.test(String(e && e.message))) log('خطا در خروجی: ' + (e && e.message || e), 'err'); });
+  }
+  var b = new Blob([text], { type: mime }), u = URL.createObjectURL(b), a = document.createElement('a');
+  a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(u); }, 2000);
+  return Promise.resolve();
+}
+$('#bExp').addEventListener('click', function () {
+  exportFile(safeName() + '.html', buildDoc(getCode(), safeName(), false), 'text/html');
+  log('خروجی HTML ساخته شد.');
+});
+$('#bBak').addEventListener('click', function () {
+  var data = { app: 'jarvis-core', v: 2, projects: listProjects() };
+  exportFile('jarvis-backup-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(data, null, 2), 'application/json');
+});
+$('#bImp').addEventListener('click', function () { $('#fileIn').click(); });
+function splitHtml(text) {
+  var doc = new DOMParser().parseFromString(text, 'text/html');
+  var css = Array.prototype.map.call(doc.querySelectorAll('style'), function (s) { return s.textContent.trim(); }).join('\n\n');
+  var js = Array.prototype.filter.call(doc.querySelectorAll('script'), function (s) { return !s.src; })
+    .map(function (s) { return s.textContent.trim(); }).join('\n\n');
+  doc.querySelectorAll('style,script').forEach(function (n) { n.remove(); });
+  return { html: doc.body.innerHTML.trim(), css: css, js: js };
+}
+$('#fileIn').addEventListener('change', function (e) {
+  var f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  f.text().then(function (t) {
+    if (/\.json$/i.test(f.name)) {
+      var j = JSON.parse(t);
+      if (j.projects && j.projects.length) {
+        if (!confirm(j.projects.length + ' پروژه وارد شود؟ (هم‌نام‌ها جایگزین می‌شوند)')) return;
+        j.projects.forEach(function (p) {
+          localStorage.setItem(PFX + p.name, JSON.stringify({ html: p.html || '', css: p.css || '', js: p.js || '', ts: p.ts || Date.now() }));
+        });
+        renderProjects(); toast('وارد شد ✓'); return;
+      }
+      throw new Error('فرمت JSON پشتیبانی نمی‌شود');
+    }
+    setCode(splitHtml(t)); nameEl.value = f.name.replace(/\.[^.]+$/, ''); current = null;
+    setDirty(true); onEdit(); closeOv('ovProj'); toast('فایل وارد شد ✓'); log('فایل "' + f.name + '" وارد شد.', 'info');
+  }).catch(function (err) { log('خطا در وارد کردن: ' + err.message, 'err'); });
+});
+$('#bCopy').addEventListener('click', function () {
+  var t = ED[active].value;
+  var p = (window.Native && window.Native.copy) ? window.Native.copy(t) : navigator.clipboard.writeText(t);
+  Promise.resolve(p).then(function () { toast('کپی شد ✓'); }, function () { toast('کپی ناموفق'); });
+});
+$('#bClr').addEventListener('click', function () { term.innerHTML = ''; log('ترمینال پاک شد.', 'info'); });
+
+/* ---------- وضعیت شبکه ---------- */
+function netUi() {
+  var on = navigator.onLine;
+  $('#st').classList.toggle('off', !on);
+  $('#stTxt').textContent = on ? 'ONLINE' : 'OFFLINE';
+}
+window.addEventListener('online', netUi); window.addEventListener('offline', netUi); netUi();
+
+/* ---------- تنظیمات ---------- */
+var DEF = { key: '', model: 'claude-sonnet-5-5', ctx: true };
+function getSet() { return Object.assign({}, DEF, LS.get('jc.set', {})); }
+function openSettings() {
+  var s = getSet();
+  $('#setKey').value = s.key; $('#setModel').value = s.model; $('#setCtx').checked = !!s.ctx;
+  openOv('ovSet');
+}
+$('#bSet').addEventListener('click', openSettings);
+$('#aiSet').addEventListener('click', openSettings);
+$('#setSave').addEventListener('click', function () {
+  LS.set('jc.set', { key: $('#setKey').value.trim(), model: $('#setModel').value.trim() || DEF.model, ctx: $('#setCtx').checked });
+  closeOv('ovSet'); toast('تنظیمات ذخیره شد ✓');
+});
+
+/* ---------- دستیار هوشمند ---------- */
+var SYS = 'تو «جارویس»، دستیار برنامه‌نویسی داخل یک محیط توسعه موبایلی برای ساخت پروژه‌های وب (HTML/CSS/JS) هستی. به زبان کاربر (پیش‌فرض فارسی) کوتاه و کاربردی جواب بده. هر وقت کد می‌دهی، برای هر بخش یک بلوک جدا با برچسب دقیق ```html و ```css و ```js بده و همیشه کد کامل جایگزین را بنویس، نه تکه‌تکه. بخش html فقط محتوای body باشد (بدون تگ‌های html/head/body و بدون تگ script و style). کد باید روی موبایل و صفحه لمسی خوب کار کند و به منابع اینترنتی خارجی وابسته نباشد. اگر بخشی تغییر نکرده، بلوکش را تکرار نکن.';
+var chat = [], aiCtl = null, busy = false;
+var M_ERR = '\n\n[ERRORS]\n', M_CTX = '\n\n---\nپروژه فعلی:\n';
+
+function langTarget(l) { l = (l || '').toLowerCase(); return l === 'html' ? 'html' : l === 'css' ? 'css' : (l === 'js' || l === 'javascript') ? 'js' : null; }
+function snapshot() { undoStack.push(getCode()); if (undoStack.length > 20) undoStack.shift(); $('#aiUndo').style.display = ''; }
+function applyBlock(b) {
+  var t = langTarget(b.lang); if (!t) return;
+  snapshot();
+  if (t === 'html' && (/<html[\s>]/i.test(b.code) || /<!doctype/i.test(b.code))) { setCode(splitHtml(b.code)); }
+  else { ED[t].value = b.code; }
+  setTab(t); setDirty(true); onEdit(); updCnt();
+  log('کد ' + t.toUpperCase() + ' از هوش مصنوعی اعمال شد.', 'info'); toast('اعمال شد ✓');
+}
+$('#aiUndo').addEventListener('click', function () {
+  var s = undoStack.pop(); if (!s) return;
+  setCode(s); setDirty(true); onEdit(); toast('بازگردانی شد');
+  if (!undoStack.length) $('#aiUndo').style.display = 'none';
+});
+function renderMsg(el, text) {
+  var parts = text.split('```'), h = '', blocks = [];
+  parts.forEach(function (p, i) {
+    if (i % 2 === 0) {
+      h += esc(p).replace(/\n/g, '<br>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    } else {
+      var m = p.match(/^([a-zA-Z]*)\n?/), lang = (m ? m[1] : '').toLowerCase(), code = p.slice(m ? m[0].length : 0).replace(/\n$/, '');
+      var idx = blocks.length; blocks.push({ lang: lang, code: code });
+      var t = langTarget(lang);
+      h += '<div class="cb"><div class="cbh"><span>' + (lang || 'code') + '</span><span>' +
+        (t ? '<button data-a="apply" data-i="' + idx + '">اعمال در ' + t.toUpperCase() + '</button>' : '') +
+        '<button data-a="copy" data-i="' + idx + '">کپی</button></span></div><pre>' + esc(code) + '</pre></div>';
+    }
+  });
+  var n = blocks.filter(function (b) { return langTarget(b.lang); }).length;
+  if (n > 1 && parts.length % 2 === 1) h += '<button class="ap" data-a="all">✅ اعمال همه (' + n + ' بخش)</button>';
+  el.innerHTML = h; el._blocks = blocks;
+}
+$('#msgs').addEventListener('click', function (e) {
+  var b = e.target.closest('button[data-a]'); if (!b) return;
+  var msg = b.closest('.msg'), bl = msg && msg._blocks || [], a = b.getAttribute('data-a');
+  if (a === 'apply') applyBlock(bl[+b.getAttribute('data-i')]);
+  else if (a === 'copy') { navigator.clipboard.writeText(bl[+b.getAttribute('data-i')].code).then(function () { toast('کپی شد ✓'); }); }
+  else if (a === 'all') { bl.forEach(applyBlock); }
+});
+function addMsg(role, text) {
+  var d = document.createElement('div'); d.className = 'msg ' + role;
+  if (role === 'bot') renderMsg(d, text); else d.textContent = text;
+  var box = $('#msgs'); box.appendChild(d); box.scrollTop = box.scrollHeight; return d;
+}
+function ctxBlock() {
+  var c = getCode();
+  function cut(s) { return s.length > 14000 ? s.slice(0, 14000) + '\n/* ...بریده شد */' : s; }
+  return '```html\n' + cut(c.html) + '\n```\n```css\n' + cut(c.css) + '\n```\n```js\n' + cut(c.js) + '\n```';
+}
+function setBusy(b) { busy = b; $('#aiSend').textContent = b ? '■' : '➤'; }
+async function aiSend(text, withErrors) {
+  var s = getSet();
+  if (!s.key) { openSettings(); toast('اول کلید API را وارد کن'); return; }
+  if (!navigator.onLine) { addMsg('bot', '⚠️ اینترنت قطع است.'); return; }
+  chat.forEach(function (m) { if (m.role === 'user') m.content = m.content.split(M_ERR)[0].split(M_CTX)[0]; });
+  var content = text;
+  if (withErrors) content += M_ERR + (lastErrors.length ? lastErrors.slice(-8).join('\n') : '(خطایی ثبت نشده؛ برنامه را یک بار اجرا کن)');
+  if (s.ctx) content += M_CTX + ctxBlock();
+  chat.push({ role: 'user', content: content });
+  addMsg('user', text);
+  var el = addMsg('bot', '…'), full = '';
+  aiCtl = new AbortController(); setBusy(true);
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST', signal: aiCtl.signal,
+      headers: { 'content-type': 'application/json', 'x-api-key': s.key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: s.model, max_tokens: 8000, stream: true, system: SYS, messages: chat.slice(-11) })
+    });
+    if (!res.ok) {
+      var m = 'HTTP ' + res.status;
+      try { var j = await res.json(); m = (j.error && j.error.message) || m; } catch (e) {}
+      throw new Error(m);
+    }
+    var rd = res.body.getReader(), dec = new TextDecoder(), buf = '';
+    for (;;) {
+      var r = await rd.read(); if (r.done) break;
+      buf += dec.decode(r.value, { stream: true });
+      var i;
+      while ((i = buf.indexOf('\n')) >= 0) {
+        var line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+        if (line.indexOf('data:') !== 0) continue;
+        var d = line.slice(5).trim(); if (!d || d === '[DONE]') continue;
+        var ev; try { ev = JSON.parse(d); } catch (e) { continue; }
+        if (ev.type === 'content_block_delta' && ev.delta && ev.delta.text) {
+          full += ev.delta.text; renderMsg(el, full);
+          var box = $('#msgs'); box.scrollTop = box.scrollHeight;
+        } else if (ev.type === 'error') { throw new Error((ev.error && ev.error.message) || 'خطای سرور'); }
+      }
+    }
+    if (!full) renderMsg(el, '(پاسخ خالی بود)');
+  } catch (err) {
+    if (err.name === 'AbortError') { if (!full) el.textContent = '⏹ متوقف شد'; }
+    else { el.innerHTML = '⚠️ ' + esc(err.message); log('AI: ' + err.message, 'err'); }
+  } finally {
+    if (full) chat.push({ role: 'assistant', content: full }); else chat.pop();
+    setBusy(false); aiCtl = null;
+  }
+}
+function sendFromInput() {
+  if (busy) { if (aiCtl) aiCtl.abort(); return; }
+  var t = $('#aiIn').value.trim(); if (!t) return;
+  $('#aiIn').value = ''; $('#aiIn').style.height = 'auto';
+  aiSend(t, false);
+}
+$('#aiSend').addEventListener('click', sendFromInput);
+$('#aiIn').addEventListener('input', function () { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 120) + 'px'; });
+$('#aiClear').addEventListener('click', function () {
+  if (aiCtl) aiCtl.abort();
+  chat = []; $('#msgs').innerHTML = ''; welcome();
+});
+var Q = {
+  fix: ['کد من را بررسی کن، خطاها را پیدا و رفع کن.', true],
+  explain: ['کد پروژه را ساده و کوتاه توضیح بده.', false],
+  ui: ['ظاهر پروژه را مدرن‌تر و زیباتر کن (تم تیره، رنگ‌های فیروزه‌ای).', false],
+  opt: ['کد را بهینه و تمیزتر کن بدون اینکه رفتارش تغییر کند.', false]
+};
+$$('#chips button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var k = b.getAttribute('data-q');
+    if (busy) return;
+    if (k === 'build') { $('#aiIn').value = 'یک برنامه/بازی کامل بساز که: '; $('#aiIn').focus(); return; }
+    aiSend(Q[k][0], Q[k][1]);
+  });
+});
+function welcome() {
+  addMsg('bot', 'سلام! من جارویسم 🤖\nبگو چی بسازم، یا از دکمه‌های پایین استفاده کن. کدهایی که می‌دهم با دکمه «اعمال» مستقیم در ادیتور می‌نشینند و با ↩ برمی‌گردند.');
+}
+function openAi() { if (!$('#msgs').children.length) welcome(); openOv('ovAi'); }
+$('#bAi').addEventListener('click', openAi);
+$('#bAi2').addEventListener('click', openAi);
+
+/* ---------- شروع ---------- */
+var dr = LS.get('jc.draft', null);
+if (dr) {
+  setCode(dr); nameEl.value = dr.name || 'Project_1'; current = dr.cur || null;
+  log('پیش‌نویس قبلی بازیابی شد.', 'info');
+}
+updCnt();
+})();
+</script>
+</body>
+</html>
