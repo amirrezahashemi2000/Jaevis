@@ -218,13 +218,15 @@ jobs:
           })();
           EOF
 
-          if ! grep -q 'native-bridge.js' build_temp/www/index.html; then
-            if grep -qi '</body>' build_temp/www/index.html; then
-              sed -i 's#</body>#<script src="native-bridge.js"></script>\n</body>#I' build_temp/www/index.html
-            else
-              echo '<script src="native-bridge.js"></script>' >> build_temp/www/index.html
-            fi
-          fi
+          python3 - <<'PY'
+          p = 'build_temp/www/index.html'
+          s = open(p, encoding='utf-8').read()
+          tag = '<script src="native-bridge.js"></script>\n'
+          if 'native-bridge.js' not in s:
+              i = s.lower().rfind('</body>')
+              s = (s[:i] + tag + s[i:]) if i >= 0 else (s + '\n' + tag)
+              open(p, 'w', encoding='utf-8').write(s)
+          PY
 
       - name: Install Capacitor + plugins
         working-directory: build_temp
