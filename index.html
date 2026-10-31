@@ -1,143 +1,44 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JARVIS CORE - v2</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; }
-        body { background: #0a0e17; color: #00f3ff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; }
-        header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; }
-        h1 { font-size: 14px; letter-spacing: 1px; color: #fff; }
-        .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
-        button, select, input { background: #111b2b; color: #00f3ff; border: 1px solid #00f3ff; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer; text-align: center; }
-        button:active { background: #00f3ff; color: #000; }
-        .editor-box { display: flex; flex-direction: column; margin-bottom: 6px; }
-        .editor-label { font-size: 11px; color: #8ab4f8; margin-bottom: 3px; display: flex; justify-content: space-between; }
-        textarea { width: 100%; height: 90px; background: #05070a; color: #e0e0e0; border: 1px solid #1e3a5f; border-radius: 6px; padding: 8px; font-size: 12px; resize: none; }
-        textarea:focus { border-color: #00f3ff; outline: none; }
-        .btn-run { background: linear-gradient(45deg, #0077ff, #00f3ff); color: #000; font-weight: bold; width: 100%; padding: 10px; border: none; border-radius: 6px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
-        .terminal { background: #000; border: 1px solid #1e3a5f; border-radius: 6px; padding: 8px; height: 90px; overflow-y: auto; font-size: 11px; color: #00ff66; }
-        .terminal p { margin-bottom: 3px; }
-        .terminal .error { color: #ff3333; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>JARVIS CORE</h1>
-        <span style="font-size: 10px; color: #00ff66;">● ONLINE</span>
-    </header>
-
-    <div class="controls">
-        <input type="text" id="projName" value="Project_1">
-        <button onclick="saveProject()">ذخیره</button>
-        <button onclick="exportProject()">خروجی HTML</button>
-    </div>
-
-    <div class="editor-box">
-        <div class="editor-label"><span>HTML</span></div>
-        <textarea id="htmlCode" placeholder="<!-- ساختار HTML -->"></textarea>
-    </div>
-
-    <div class="editor-box">
-        <div class="editor-label"><span>CSS</span></div>
-        <textarea id="cssCode" placeholder="/* استایل‌های CSS */"></textarea>
-    </div>
-
-    <div class="editor-box">
-        <div class="editor-label"><span>JAVASCRIPT</span></div>
-        <textarea id="jsCode" placeholder="// کدهای جاوااسکریپت"></textarea>
-    </div>
-
-    <button class="btn-run" onclick="executeProtocol()">اجرای پروتکل (Execute)</button>
-
-    <div class="terminal" id="terminal">
-        <p>[سیستم آماده است. گزارش‌ها اینجا ظاهر می‌شوند...]</p>
-    </div>
-
-    <script>
-        function logToTerminal(text, isError = false) {
-            const term = document.getElementById('terminal');
-            const p = document.createElement('p');
-            if(isError) p.className = 'error';
-            p.textContent = `> ${text}`;
-            term.appendChild(p);
-            term.scrollTop = term.scrollHeight;
-        }
-
-        // Catch console errors and logs inside execution
-        window.onerror = function(msg, url, line) {
-            logToTerminal(`خطا: ${msg} (خط ${line})`, true);
-        };
-
-        function executeProtocol() {
-            const html = document.getElementById('htmlCode').value;
-            const css = document.getElementById('cssCode').value;
-            const js = document.getElementById('jsCode').value;
-
-            logToTerminal("در حال اجرای پروتکل...");
-
-            const win = window.open('', '_blank');
-            if (!win) {
-                logToTerminal("خطا: مرورگر مانع از باز شدن پنجره شد.", true);
-                return;
-            }
-
-            win.document.write(`
-                <!DOCTYPE html>
-                <html lang="fa" dir="rtl">
-                <head>
-                    <meta charset="UTF-8">
-                    <style>${css}</style>
-                </head>
-                <body>
-                    ${html}
-                    <script>
-                        // بازنویسی console.log برای ارسال به ترمینال جارویس
-                        const originalLog = console.log;
-                        console.log = function(...args) {
-                            originalLog.apply(console, args);
-                        };
-                        try {
-                            ${js}
-                        } catch(err) {
-                            console.error(err);
-                        }
-                    <\/script>
-                </body>
-                </html>
-            `);
-            win.document.close();
-            logToTerminal("پروتکل با موفقیت اجرا شد.");
-        }
-
-        function saveProject() {
-            const name = document.getElementById('projName').value;
-            const data = {
-                html: document.getElementById('htmlCode').value,
-                css: document.getElementById('cssCode').value,
-                js: document.getElementById('jsCode').value
-            };
-            localStorage.setItem('jarvis_' + name, JSON.stringify(data));
-            logToTerminal(`پروژه "${name}" با موفقیت ذخیره شد.`);
-        }
-
-        function exportProject() {
-            const html = document.getElementById('htmlCode').value;
-            const css = document.getElementById('cssCode').value;
-            const js = document.getElementById('jsCode').value;
-
-            const fullCode = `<!DOCTYPE html>\n<html lang="fa" dir="rtl">\n<head>\n<meta charset="UTF-8">\n<style>\n${css}\n</style>\n</head>\n<body>\n${html}\n<script>\n${js}\n<\/script>\n</body>\n</html>`;
-
-            const blob = new Blob([fullCode], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = (document.getElementById('projName').value || 'project') + '.html';
-            a.click();
-            logToTerminal("فایل خروجی HTML ساخته و دانلود شد.");
-        }
-    </script>
-</body>
-</html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#050a12">
+<title>Jarvis Core</title>
+<style>
+:root{--bg:#050a12;--panel:#0b1422;--panel2:#101c2e;--line:#16314d;--cyan:#00e5ff;--blue:#0a84ff;--green:#00ff88;--red:#ff4d6d;--yellow:#ffd166;--text:#d7e6f5;--mut:#7f95ad}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif}
+body{padding:max(env(safe-area-inset-top),16px) 12px calc(env(safe-area-inset-bottom) + 28px)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px}
+.ttl{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;letter-spacing:2px;font-size:18px;direction:ltr}
+.st{display:flex;align-items:center;gap:6px;font:12px ui-monospace,monospace;color:var(--green);direction:ltr}
+.st i{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.st.off{color:var(--red)}.st.off i{background:var(--red);box-shadow:0 0 8px var(--red)}
+.hb{display:flex;gap:6px}
+.ib{width:38px;height:38px;border-radius:12px;border:1.5px solid var(--cyan);background:var(--panel2);font-size:17px;padding:0}
+.row{display:grid;gap:8px;margin-top:10px}
+.r4{grid-template-columns:repeat(4,1fr)}
+.btn{border:1.5px solid var(--cyan);background:var(--panel2);border-radius:14px;padding:12px 6px;font-size:14px;font-weight:600}
+.btn:active{transform:scale(.97);background:#15304a}
+.btn.red{border-color:var(--red);color:var(--red)}
+.btn.sm{padding:7px 10px;font-size:12px;border-radius:10px}
+.pn{position:relative}
+#projName{width:100%;background:var(--panel2);border:1.5px solid var(--cyan);border-radius:14px;padding:12px 40px 12px 14px;font-family:ui-monospace,monospace;text-align:center;outline:0}
+#dirty{position:absolute;right:14px;top:50%;margin-top:-5px;width:10px;height:10px;border-radius:50%;background:var(--yellow);display:none}
+#dirty.on{display:block}
+.tabs{display:flex;gap:6px;margin-top:12px;align-items:center}
+.tab{flex:1;padding:9px 0;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);color:var(--mut);font:600 13px ui-monospace,monospace}
+.tab.on{border-color:var(--cyan);color:var(--cyan);background:#0c2233}
+#cnt{font:11px ui-monospace,monospace;color:var(--mut);min-width:54px;text-align:center;direction:ltr}
+#sym{display:flex;gap:5px;overflow-x:auto;direction:ltr;margin-top:8px;padding-bottom:4px}
+#sym button{flex:0 0 auto;min-width:36px;padding:7px 8px;border-radius:9px;border:1px solid var(--line);background:var(--panel2);font:14px ui-monospace,monospace}
+.ed{display:none;width:100%;height:42vh;min-height:230px;margin-top:6px;background:#03060b;border:1.5px solid var(--line);border-radius:14px;padding:12px;font:13.5px/1.55 ui-monospace,Menlo,Consolas,monospace;direction:ltr;text-align:left;white-space:pre;overflow:auto;resize:vertical;outline:0;tab-size:2}
+.ed.on{display:block}
+.ed:focus{border-color:var(--cyan)}
+.exec{width:100%;margin-top:10px;padding:16px;border:0;border-radius:14px;background:linear-gradient(90deg,#0a84ff,#00f0ff);color:#00121c;font-weight:800;font-size:16px}
+.exec:active{filter:brightness(.9)}
+.th{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font:12px ui-monospace,monospace;color:var(--mut)}
+#term{margin-top:6px;background:#000;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;height:26vh;overflow:auto;font:12px/1.6 ui-monospace,monospace;direction:rtl;text-align:right}
